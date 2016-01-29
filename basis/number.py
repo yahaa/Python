@@ -1,0 +1,44 @@
+import math
+from fractions import Fraction   
+import decimal
+a=3
+b=4
+print(a+1,a+3)
+print(b/2+a)
+print(b/(2.0+a))
+repr(b)
+str(b)
+c=5
+print(a<b<c)
+print(a/b)
+print(2//5)
+a=math.floor(3.5)
+print(a)
+aa=99999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+print(aa)
+print(4/3)
+u=1+1j
+print(u*u)
+u=2+3j
+print(u*u)
+print(0o1,0o20,0o377)
+print(0x01,0x10,0xff)
+print(0b1,0b11,0b111)
+print(oct(64),hex(64),bin(64))
+print(int('1111111111111111',8))
+print(pow(2,4))
+print(math.sin(2*math.pi/180))
+#help(math)
+print(dir(math))
+min(3,4)
+math.factorial(5)
+y=Fraction(3,5)
+x=Fraction(5,5)
+print(y+x)
+decimal.getcontext().prec=2
+ans=decimal.Decimal(1)/decimal.Decimal(3)
+print(ans)
+print(1/3)
+v=set('45667788')
+b=set(['jksdf'])
+print(v)
