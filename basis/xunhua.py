@@ -67,3 +67,4 @@ d=dict(zip(keys,value))
 print(d)
 d['china']=10000
 print(d)
+a=10000
