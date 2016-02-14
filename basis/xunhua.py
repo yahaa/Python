@@ -12,6 +12,7 @@ while x:
 	x=x[1:]
 else:
 	print(123456789)
+#python is great!
 
 # while True:
 # 	print('enter your name')
