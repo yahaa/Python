@@ -68,3 +68,7 @@ print(d)
 d['china']=10000
 print(d)
 a=10000
+
+
+for i in range(50):
+	print('\a')
