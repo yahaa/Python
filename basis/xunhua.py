@@ -68,7 +68,14 @@ print(d)
 d['china']=10000
 print(d)
 a=10000
+<<<<<<< HEAD
 a=1000
 print a
 for x in 'xxxxxxxx':
 	print x
+=======
+
+
+for i in range(50):
+	print('\a')
+>>>>>>> 03ea3255338c22a390e4a301e24f04bde7a485a1
