@@ -22,7 +22,7 @@ else:
 # 	print(y)
 # else: 
 # 	print('passt')
-
+print(a)
 s=[1,2,33,4,5,6,7,8,9]
 for a in s:
 	print(a)
@@ -68,3 +68,7 @@ print(d)
 d['china']=10000
 print(d)
 a=10000
+a=1000
+print a
+for x in 'xxxxxxxx':
+	print x
