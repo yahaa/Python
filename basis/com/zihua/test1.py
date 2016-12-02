@@ -21,6 +21,14 @@ f={"12":1,"13":6}
 for i in f.items():
     print i
 
+s="askljd5f"
+print s.isalnum()
+
+def oktt(a,b,c):
+    return a+b+c
+
+
+
 
 
 
