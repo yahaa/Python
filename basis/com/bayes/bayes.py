@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from scipy import stats
 
+
 def loadData():
     people = []
     cla = []
@@ -31,19 +32,20 @@ def train1(dataSet, cla):
     tob = sum(cla)
     bx, bq = getxq(dataSet[0:tob])
     gx, gq = getxq(dataSet[tob:])
-    return bx, bq, gx, gq, p1
+    return bx, bq, gx, gq
 
 
 def classify(h):
+    p1 = 0.5
     people, cla = loadData()
-    bx, bq, gx, gq, p1 = train1(people, cla)
+    bx, bq, gx, gq = train1(people, cla)
     pab = stats.norm.pdf(h, bx, bq)
     pag = stats.norm.pdf(h, gx, gq)
     px = pab * p1 + pag * (1 - p1)
     return pab * p1 / px, pag * (1 - p1) / px
 
 
-p1, p2 = classify(110)
+p1, p2 = classify(180)
 print ('是男生的概率为：%f' % p1)
 print ('是女生的概率为：%f' % p2)
 
