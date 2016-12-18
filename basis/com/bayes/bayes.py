@@ -1,18 +1,17 @@
 # -*- coding: UTF-8 -*-
-
-from numpy import *
-from math import *
+from scipy import stats
 
 
 def loadData():
-    boys = []
-    girls = []
+    people = []
+    cla = []
     for item in open('boy.txt', 'r').readlines():
-        boys.append(map(float, list(item.split())))
+        people.append(map(float, list(item.split())))
+        cla.append(1)
     for item in open('girl.txt', 'r').readlines():
-        girls.append(map(float, list(item.split())))
-
-    return boys, girls
+        people.append(map(float, list(item.split())))
+        cla.append(0)
+    return people, cla
 
 
 def getxq(dataSet):
@@ -28,22 +27,35 @@ def getxq(dataSet):
     return x, sum
 
 
-def train(boys, grils, x):
-    p1 = len(boys) * 1.0 / (len(boys) + len(grils))
-    bx, bq = getxq(boys)
-    gx, gq = getxq(grils)
-    fbx = 1.0 / sqrt(pi * 2 * bq) * exp((x - bx) ** 2 / (2 * bq))
-    fgx = 1.0 / sqrt(pi * 2 * gq) * exp((x - gx) ** 2 / (2 * gq))
-    return fbx * p1, fgx * (1 - p1)
+def train1(dataSet, cla):
+    p1 = sum(cla) * 1.0 / len(dataSet)
+    tob = sum(cla)
+    bx, bq = getxq(dataSet[0:tob])
+    gx, gq = getxq(dataSet[tob:])
+    return bx, bq, gx, gq, p1
 
 
-def classify():
-    boys, grils = loadData()
-    h = float(raw_input('Input height'))
-    print train(boys, grils, h)
+def classify(h):
+    people, cla = loadData()
+    bx, bq, gx, gq, p1 = train1(people, cla)
+    pab = stats.norm.pdf(h, bx, bq)
+    pag = stats.norm.pdf(h, gx, gq)
+    px = pab * p1 + pag * (1 - p1)
+    return pab * p1 / px, pag * (1 - p1) / px
 
 
-classify()
+p1, p2 = classify(110)
+print ('是男生的概率为：%f' % p1)
+print ('是女生的概率为：%f' % p2)
+
+
+
+
+
+
+
+
+
 
 
 # 最大似然估计
