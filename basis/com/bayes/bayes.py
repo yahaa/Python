@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 from scipy import stats
 
-
 def loadData():
     people = []
     cla = []
