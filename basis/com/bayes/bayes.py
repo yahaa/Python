@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 from scipy import stats
+from numpy import *
+from math import *
 
 
 def loadData():
@@ -23,12 +25,11 @@ def getxq(dataSet):
     sum = 0
     for a in dataSet:
         sum += (a[0] - x) ** 2
-    sum /= n
+    sum /= (n - 1)
     return x, sum
 
 
 def train1(dataSet, cla):
-    p1 = sum(cla) * 1.0 / len(dataSet)
     tob = sum(cla)
     bx, bq = getxq(dataSet[0:tob])
     gx, gq = getxq(dataSet[tob:])
@@ -42,25 +43,93 @@ def classify(h):
     pab = stats.norm.pdf(h, bx, bq)
     pag = stats.norm.pdf(h, gx, gq)
     px = pab * p1 + pag * (1 - p1)
-    return pab * p1 / px, pag * (1 - p1) / px
+    pb = pab * p1 / px
+    pg = pag * (1 - p1) / px
+    if pb > pg:
+        return 1
+    else:
+        return 0
 
 
-p1, p2 = classify(180)
-print ('是男生的概率为：%f' % p1)
-print ('是女生的概率为：%f' % p2)
+def getXQ2(dataSet):
+    dataSet = array(dataSet).T
+    u = mean(dataSet, 1)
+    q = cov(dataSet)
+    return u, q
 
 
+def train2(dataSet, cla):
+    tob = sum(cla)
+    bx, bqm = getXQ2(dataSet[0:tob])
+    gx, gqm = getXQ2(dataSet[tob:])
+    return bx, bqm, gx, gqm
 
 
+def classify2(p):
+    p1 = 0.5
+    data, cla = loadData()
+    bx, bqm, gx, gqm = train2(data, cla)
+    pab = nnorm(p, bx, bqm)
+    pag = nnorm(p, gx, gqm)
+    px = pab * p1 + pag * (1 - p1)
+
+    pb = pab * p1 / px
+    pg = pag * (1 - p1) / px
+    if pb > pg:
+        return 1, pb, pg
+    else:
+        return 0, pb, pg
 
 
+def nnorm(p, u, qm):
+    a = array(p - u)
+    d = float(len(p))
+    return exp(-0.5 * dot(dot(a.T, linalg.inv(qm)), a)) / ((2 * pi) ** (d / 2) * (linalg.det(qm)) ** 0.5)
 
 
+def loadTest(fileName):
+    test = []
+    for item in open(fileName, 'r').readlines():
+        test.append(map(float, list(item.split())))
+
+    if str(fileName).find('boy') >= 0:
+        return test, 1
+    else:
+        return test, 0
 
 
+def errorp2(test, k):
+    total = len(test)
+    boy = 0
+    for p in test:
+        boy += classify2(p)[0]
+    if k == 1:
+        print ('该测试样本为男生，总测试人数为 %d, 错误率为 %f' % (total, ((total - boy) * 1.0 / total)))
+    else:
+        print ('该测试样本为女生，总测试人数为 %d, 错误率为 %f' % (total, (boy * 1.0 / total)))
 
-# 最大似然估计
-# 多员正态分布
-# 正态分布
-# 协方差
-# 协方差矩阵
+
+def errorp1(test, k):
+    total = len(test)
+    boy = 0
+    for p in test:
+        boy += classify(p[0])
+    if k == 1:
+        print ('该测试样本为男生，总测试人数为 %d, 错误率为 %f' % (total, ((total - boy) * 1.0 / total)))
+    else:
+        print ('该测试样本为女生，总测试人数为 %d, 错误率为 %f' % (total, (boy * 1.0 / total)))
+
+
+def addS(p):
+    s = [[0, 10], [15, 0]]
+    kind,p1, p2 = classify2(p)
+    pp = [p1, p2]
+    sm = zeros(2)
+    for k in range(len(s)):
+        for i in s[k]:
+            sm[k] += s[k][i] * pp[i]
+    print sm
+
+
+test,k=loadTest('boy.txt')
+errorp1(test,k)
