@@ -22,11 +22,11 @@ def getxq(dataSet):
     for a in dataSet:
         x += a[0]
     x /= n
-    sum = 0
+    sm = 0
     for a in dataSet:
-        sum += (a[0] - x) ** 2
-    sum /= (n - 1)
-    return x, sum
+        sm += (a[0] - x) ** 2
+    sm /= (n - 1)
+    return x, sm
 
 
 def train1(dataSet, cla):
@@ -122,7 +122,7 @@ def errorp1(test, k):
 
 def addS(p):
     s = [[0, 10], [15, 0]]
-    kind,p1, p2 = classify2(p)
+    kind, p1, p2 = classify2(p)
     pp = [p1, p2]
     sm = zeros(2)
     for k in range(len(s)):
@@ -131,5 +131,44 @@ def addS(p):
     print sm
 
 
+
+
+def parzen(x, dataSet):
+    p = 0.0
+    for item in dataSet:
+        p += f(x - item[0])
+    return p
+
+
+def f(x):
+    return exp(-0.5 * x ** 2) / ((2 * pi) ** 0.5)
+
+
+def classify3(x):
+    p1 = 0.5
+    peoples, cla = loadData()
+    n = sum(cla)
+    pmb = parzen(x, peoples[0:n])
+    pmg = parzen(x, peoples[n:])
+
+    px = pmb * p1 + pmg * (1 - p1)
+    pb = pmb * p1 / px
+    pg = pmg * (1 - p1) / px
+    if pb > pg:
+        return 1, pb, pg
+    else:
+        return 0, pb, pg
+
+
+def errorp3(test, k):
+    total = len(test)
+    boy = 0
+    for p in test:
+        boy += classify3(p[0])[0]
+    if k == 1:
+        print ('该测试样本为男生，总测试人数为 %d, 错误率为 %f' % (total, ((total - boy) * 1.0 / total)))
+    else:
+        print ('该测试样本为女生，总测试人数为 %d, 错误率为 %f' % (total, (boy * 1.0 / total)))
+
 test,k=loadTest('boy.txt')
-errorp1(test,k)
+errorp3(test,k)
