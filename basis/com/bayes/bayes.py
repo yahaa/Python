@@ -13,6 +13,7 @@ def loadData():
     for item in open('girl.txt', 'r').readlines():
         people.append(map(float, list(item.split())))
         cla.append(0)
+    print people
     return people, cla
 
 
@@ -131,8 +132,6 @@ def addS(p):
     print sm
 
 
-
-
 def parzen(x, dataSet):
     p = 0.0
     for item in dataSet:
@@ -170,5 +169,6 @@ def errorp3(test, k):
     else:
         print ('该测试样本为女生，总测试人数为 %d, 错误率为 %f' % (total, (boy * 1.0 / total)))
 
-test,k=loadTest('boy.txt')
-errorp3(test,k)
+
+test, k = loadTest('boy.txt')
+errorp2(test, k)
