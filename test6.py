@@ -1,11 +1,5 @@
-#!/usr/bin/env python
 #-*- coding: utf-8 -*-
-
-'''
-LDA算法实现
-'''
-
-__author__='zj'
+__author__='zihua'
 
 import os
 import sys
