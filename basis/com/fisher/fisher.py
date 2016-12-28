@@ -69,7 +69,7 @@ def loadTest(filepath):
     people = []
     for item in open(filepath, 'r').readlines():
         people.append(map(float, list(item.split())[0:2]))
-    if filepath.find('boy')>=0:
+    if filepath.find('boy') >= 0:
         return people, 1
     else:
         return people, 0
@@ -83,16 +83,39 @@ def errorp():
     wxx = swi * matrix(M1 - M2).T
     m1 = wxx.T * matrix(M1).T
     m2 = wxx.T * matrix(M2).T
+
     w0 = (array(m1) + array(m2)) / 2
     test, k = loadTest('boy83.txt')
-    total=len(test)
-    boy = 0
-    for item in test:
-        boy += classify(item, wxx, w0)
-    if k == 1:
-        print ('该测试样本为男生，总测试人数为 %d, 错误率为 %f' % (total, ((total - boy) * 1.0 / total)))
-    else:
-        print ('该测试样本为女生，总测试人数为 %d, 错误率为 %f' % (total, (boy * 1.0 / total)))
+    total = len(test)
+    x = []
+    y = []
+    minm = float(min(m1, m2))
+    maxm = float(max(m1, m2))
+
+    ww0 = minm
+
+    while ww0 < maxm:
+        boy = 0
+        for item in test:
+            boy += classify(item, wxx, ww0)
+        if k == 1:
+            pf = (total - boy) * 1.0 / total
+            x.append(pf)
+            y.append(1 - pf)
+        else:
+            pf = boy * 1.0 / total
+            y.append(pf)
+            x.append(1 - pf)
+        ww0 += 0.1
+    print x
+    print y
+    plt.xlim(0.0, 1.0)
+    plt.ylim(0.0, 1.0)
+    plt.plot(x, y, '*', color='r')
+    plt.xlabel('girl')
+    plt.ylabel('boy')
+    plt.title('Roc')
+    plt.show()
 
 
 data, cla = loadData()
@@ -114,8 +137,7 @@ print('m1= ', m1)
 print('m2= ', m2)
 print('w0= ', w0)
 
-errorp()
+print errorp()
 
 x = np.arange(120.0, 220.0, 1)
 draw(x, float(w0), float(wxx[0]), float(wxx[1]), data, cla)
-
