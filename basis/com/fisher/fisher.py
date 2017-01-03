@@ -1,12 +1,7 @@
 # -*- coding: UTF-8 -*-
-import os
-import sys
 import numpy as np
-import operator
 import matplotlib.pyplot as plt
-from scipy import stats
 from numpy import *
-from math import *
 
 
 def loadData():
